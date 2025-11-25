@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nossa História - Para Sempre</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #ff4d6d;
+            --secondary: #ff8fa3;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --light: #fff0f3;
+            --accent: #c9184a;
+            --gold: #d4af37;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--darker) 0%, #1a0b10 100%);
+        }
+
+        /* Efeito de partículas no fundo */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        /* Overlay inicial estilo cinematográfico */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(10, 10, 10, 0.9), rgba(26, 11, 16, 0.95));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        .overlay-content {
+            text-align: center;
+            animation: cinematicIntro 3s ease-out;
+            position: relative;
+        }
+
+        .overlay-title {
+            font-size: 4.5rem;
+            margin-bottom: 30px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, var(--gold), var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(255, 77, 109, 0.5);
+            position: relative;
+        }
+
+        .overlay-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--primary), transparent);
+        }
+
+        .heart-btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            padding: 20px 50px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            border: none;
+            font-size: 1.3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+            margin-top: 40px;
+        }
+
+        .heart-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .heart-btn:hover::before {
+            left: 100%;
+        }
+
+        .heart-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 77, 109, 0.6);
+        }
+
+        /* Navegação estilo Rockstar */
+        .main-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 77, 109, 0.2);
+            transform: translateY(-100%);
+            animation: slideDown 1s ease 1s forwards;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Player de música estilo cinematográfico */
+        .music-player {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            background: rgba(5, 5, 5, 0.8);
+            padding: 15px 20px;
+            border-radius: 5px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 77, 109, 0.3);
+            transform: translateX(150%);
+            animation: slideInRight 1s ease 1.5s forwards;
+        }
+
+        .music-info {
+            margin-right: 15px;
+            font-size: 0.9rem;
+            color: var(--light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .music-control {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .music-control:hover {
+            transform: scale(1.2);
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Seção de introdução */
+        .intro-section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .intro-title {
+            font-size: 5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1.5s ease 2s forwards;
+            background: linear-gradient(to right, var(--gold), var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+        }
+
+        .intro-subtitle {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1.5s ease 2.3s forwards;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            animation: fadeIn 1s ease 3s forwards;
+        }
+
+        .scroll-text {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            color: var(--light);
+        }
+
+        .scroll-arrow {
+            width: 20px;
+            height: 20px;
+            border-right: 2px solid var(--primary);
+            border-bottom: 2px solid var(--primary);
+            transform: rotate(45deg);
+            animation: bounce 2s infinite;
+        }
+
+        /* Seções de memória com transições cinematográficas */
+        .memory-section {
+            min-height: 100vh;
+            padding: 100px 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .memory-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .memory-text {
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: all 1s ease;
+        }
+
+        .memory-text.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .memory-date {
+            font-size: 1.2rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .memory-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(to right, var(--gold), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .memory-description {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .memory-image {
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 1s ease;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .memory-image.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .memory-image img {
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+            transition: transform 1.2s ease;
+        }
+
+        .memory-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .memory-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 77, 109, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .memory-image:hover::after {
+            opacity: 1;
+        }
+
+        /* Seção de proposta */
+        .proposal-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .proposal-content {
+            max-width: 900px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+        }
+
+        .proposal-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .proposal-title {
+            font-size: 1.5rem;
+            color: var(--light);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .big-question {
+            font-size: 5rem;
+            font-weight: 700;
+            margin: 50px 0;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            background: linear-gradient(to right, var(--gold), var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(255, 77, 109, 0.3);
+            position: relative;
+        }
+
+        .big-question::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--primary), transparent);
+        }
+
+        .yes-btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            padding: 25px 70px;
+            font-size: 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.4);
+            position: relative;
+            overflow: hidden;
+            margin-top: 40px;
+        }
+
+        .yes-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .yes-btn:hover::before {
+            left: 100%;
+        }
+
+        .yes-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 77, 109, 0.6);
+        }
+
+        /* Animações */
+        @keyframes cinematicIntro {
+            0% {
+                opacity: 0;
+                transform: scale(1.2);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideDown {
+            0% {
+                transform: translateY(-100%);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            0% {
+                transform: translateX(150%);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) rotate(45deg);
+            }
+            40% {
+                transform: translateY(-10px) rotate(45deg);
+            }
+            60% {
+                transform: translateY(-5px) rotate(45deg);
+            }
+        }
+
+        /* Responsividade */
+        @media (max-width: 968px) {
+            .memory-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .intro-title {
+                font-size: 3.5rem;
+            }
+            
+            .big-question {
+                font-size: 3.5rem;
+            }
+            
+            .memory-title {
+                font-size: 2.5rem;
+            }
+            
+            .overlay-title {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .intro-title {
+                font-size: 2.5rem;
+            }
+            
+            .big-question {
+                font-size: 2.5rem;
+            }
+            
+            .memory-title {
+                font-size: 2rem;
+            }
+            
+            .overlay-title {
+                font-size: 2.2rem;
+            }
+            
+            .yes-btn {
+                padding: 20px 40px;
+                font-size: 1.2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Efeito de partículas -->
+    <div id="particles-js"></div>
+
+    <!-- Overlay inicial -->
+    <div id="overlay">
+        <div class="overlay-content">
+            <h1 class="overlay-title">Nossa História</h1>
+            <button class="heart-btn" onclick="startExperience()">
+                <i class="fas fa-play"></i> INICIAR EXPERIÊNCIA
+            </button>
+        </div>
+    </div>
+
+    <!-- Navegação principal -->
+    <nav class="main-nav">
+        <div class="logo">Amor Eterno</div>
+        <div class="nav-links">
+            <a href="#inicio">Início</a>
+            <a href="#memorias">Memórias</a>
+            <a href="#proposta">Proposta</a>
+        </div>
+    </nav>
+
+    <!-- Player de música -->
+    <div class="music-player">
+        <div class="music-info">Nossa Trilha Sonora</div>
+        <button class="music-control" id="music-toggle">
+            <i class="fas fa    -play"></i>
+        </button>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div class="container">
+        <!-- Seção de introdução -->
+        <section class="intro-section" id="inicio">
+            <h1 class="intro-title">Do Começo ao Eterno</h1>
+            <p class="intro-subtitle">Uma jornada de amor, risadas e momentos inesquecíveis que nos trouxeram até aqui</p>
+            <div class="scroll-indicator">
+                <div class="scroll-text">Scroll</div>
+                <div class="scroll-arrow"></div>
+            </div>
+        </section>
+
+        <!-- Memória 1 -->
+        <section class="memory-section" id="memorias">
+            <div class="memory-content">
+                <div class="memory-text">
+                    <div class="memory-date">2022 - O Início</div>
+                    <h2 class="memory-title">Quando Tudo Começou</h2>
+                    <p class="memory-description">O dia em que nossas vidas se cruzaram e tudo mudou para sempre. Cada olhar, cada sorriso, confirmava que havia encontrado algo verdadeiramente especial. O início de uma história que prometia ser extraordinária.</p>
+                </div>
+                <div class="memory-image">
+                    <img src="parada_03.JPEG" alt="Nosso começo">
+                </div>
+            </div>
+        </section>
+
+        <!-- Memória 2 -->
+        <section class="memory-section">
+            <div class="memory-content">
+                <div class="memory-image">
+                    <img src="praia_01.JPEG" alt="Viagem">
+                </div>
+                <div class="memory-text">
+                    <div class="memory-date">A Primeira Aventura</div>
+                    <h2 class="memory-title">Descobrindo o Mundo Juntos</h2>
+                    <p class="memory-description">Nossa primeira viagem foi a confirmação de que qualquer lugar do mundo se torna perfeito quando estamos juntos. Cada novo destino se transforma em uma aventura inesquecível ao seu lado.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Memória 3 -->
+        <section class="memory-section">
+            <div class="memory-content">
+                <div class="memory-text">
+                    <div class="memory-date">Momentos Preciosos</div>
+                    <h2 class="memory-title">O tempo para quando estamos assim.</h2>
+                    <p class="memory-description">Não há lugar no mundo onde eu prefira estar do que aqui, perdido nesse beijo. É como se tudo ao redor desaparecesse, e só existisse nós dois. Cada toque, cada suspiro, é uma declaração do quanto eu sou apaixonado por você.</p>
+                </div>
+                <div class="memory-image">
+                    <img src="beijo.JPEG" alt="Nós">
+                </div>
+            </div>
+        </section>
+
+
+        
+        <!-- Memória 4 -->
+        <section class="memory-section">
+            <div class="memory-content">
+                <div class="memory-text">
+                    <div class="memory-date">Sol, Você e Nosso 1º Ano</div>
+                    <h2 class="memory-title">O Dia Dela</h2>
+                    <p class="memory-description">Nesse dia comemoramos o seu nascimento, mas o presente quem ganhou fui eu: nosso primeiro ano completo juntos. Ver você sorrindo assim, iluminada pelo sol, me fez perceber que eu quero celebrar todas as suas datas especiais ao seu lado para sempre.</p>
+                </div>
+                <div class="memory-image">
+                    <img src="kassandra e gabriel no clube 2.JPEG" alt="Nós">
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Memória 5 -->
+        <section class="memory-section">
+            <div class="memory-content">
+                <div class="memory-text">
+                    <div class="memory-date">Love Love</div>
+                    <h2 class="memory-title">Nossa Química</h2>
+                    <p class="memory-description">A primeira vez que o mundo lá fora deixou de existir completamente. Foi nesse dia, na nossa intimidade, que eu percebi que minha pele conhece a sua como se fossem uma só. Foi intenso, foi nosso, e foi inesquecível.</p>
+                </div>
+                <div class="memory-image">
+                    <img src="motel_01.JPEG" alt="Nós">
+                </div>
+            </div>
+        </section>
+
+         <!-- Memória 6 -->
+        <section class="memory-section">
+            <div class="memory-content">
+                <div class="memory-text">
+                    <div class="memory-date">Lar doce lar</div>
+                    <h2 class="memory-title">O Início do Nosso Lar</h2>
+                    <p class="memory-description">O dia em que decidimos que um só teto cobriria nós dois. Sair do conforto da casa dos pais foi um desafio, mas construir o nosso próprio refúgio com você foi a melhor decisão que já tomei. Nosso alugado, nosso castelo, nosso lugar de paz.</p>
+                </div>
+                <div class="memory-image">
+                    <img src="casa_nova.JPEG" alt="Nós">
+                </div>
+            </div>
+        </section>
+
+        <!-- Memória 7 -->
+        <section class="memory-section">
+            <div class="memory-content">
+                <div class="memory-text">
+                    <div class="memory-date">uma nova historia</div>
+                    <h2 class="memory-title">Surpresa... ou quase? kkk</h2>
+                    <p class="memory-description">Você já tinha descoberto tudo antes da hora (como sempre!), mas isso não diminuiu nem um pouco a minha tremedeira. Colocar essa aliança no seu dedo foi a oficialização do que meu coração já gritava há muito tempo: você é a minha pessoa.</p>
+                </div>
+                <div class="memory-image">
+                    <img src="pedido_namoro.JPEG" alt="Nós">
+                </div>
+            </div>
+        </section>
+
+          <!-- Memória 8 -->
+        <section class="memory-section">
+            <div class="memory-content">
+                <div class="memory-text">
+                    <div class="memory-date">sempre com você</div>
+                    <h2 class="memory-title">Na Saúde e na Doença</h2>
+                    <p class="memory-description">Era para ser só um passeio no shopping, mas o destino tinha outros planos. Te levar para o hospital e cuidar de você naquele dia me mostrou o quanto eu quero te proteger. E, graças a esse imprevisto, você dormiu na minha casa pela primeira vez.</p>
+                </div>
+                <div class="memory-image">
+                    <img src="shopping.JPEG" alt="Nós">
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de proposta -->
+        <section class="proposal-section" id="proposta">
+            <div class="proposal-content">
+                <h2 class="proposal-title">E agora, depois de tantos momentos especiais...</h2>
+                <p class="intro-subtitle">Tenho apenas uma pergunta para fazer</p>
+                
+                <div class="big-question">
+                    Quer Casar Comigo?
+                </div>
+
+                <button class="yes-btn" onclick="aceitou()">
+                    SIM, EU ACEITO! <i class="fas fa-heart"></i>
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Áudio -->
+    <audio id="bg-music" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
+    <script>
+// 1. Controle do Overlay e Música
+function startExperience() {
+    const overlay = document.getElementById('overlay');
+    overlay.style.opacity = '0';
+    
+    setTimeout(() => {
+        overlay.style.display = 'none';
+    }, 1000);
+    
+    const music = document.getElementById('bg-music');
+    const musicToggle = document.getElementById('music-toggle');
+    music.volume = 0.4;
+    
+    // Tocar música automaticamente ao iniciar a experiência
+    music.play().then(() => {
+        musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
+    }).catch(e => {
+        console.log("Autoplay bloqueado:", e);
+        // Caso o autoplay seja bloqueado, mostra o botão de play
+        musicToggle.innerHTML = '<i class="fas fa-play"></i>';
+    });
+    
+    musicToggle.addEventListener('click', function() {
+        if (music.paused) {
+            music.play();
+            musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
+        } else {
+            music.pause();
+            musicToggle.innerHTML = '<i class="fas fa-play"></i>';
+        }
+    });
+    
+    // Inicializar partículas
+    initParticles();
+    
+    // Iniciar observador de interseção para animações
+    initIntersectionObserver();
+}
+
+// 2. Sistema de partículas
+function initParticles() {
+    if (typeof particlesJS !== 'undefined') {
+        particlesJS('particles-js', {
+            particles: {
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: ['#ff4d6d', '#ff8fa3', '#d4af37']
+                },
+                shape: {
+                    type: 'circle',
+                },
+                opacity: {
+                    value: 0.5,
+                    random: true,
+                },
+                size: {
+                    value: 3,
+                    random: true
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#ff4d6d',
+                    opacity: 0.2,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 1,
+                    direction: 'none',
+                    random: true,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false,
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: 'repulse'
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: 'push'
+                    },
+                    resize: true
+                }
+            }
+        });
+    }
+}
+
+// 3. Animação de Scroll (Intersection Observer)
+function initIntersectionObserver() {
+    const observerOptions = {
+        threshold: 0.3,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                if (entry.target.classList.contains('memory-text')) {
+                    entry.target.classList.add('visible');
+                } else if (entry.target.classList.contains('memory-image')) {
+                    entry.target.classList.add('visible');
+                } else if (entry.target.classList.contains('proposal-content')) {
+                    entry.target.classList.add('visible');
+                }
+            }
+        });
+    }, observerOptions);
+
+    // Observar elementos para animação
+    document.querySelectorAll('.memory-text, .memory-image, .proposal-content').forEach((el) => observer.observe(el));
+}
+
+// 4. Ação do Botão "Sim"
+function aceitou() {
+    const btn = document.querySelector('.yes-btn');
+    
+    // Animação do botão
+    btn.innerHTML = "EU TE AMO! ❤️";
+    btn.style.background = "linear-gradient(135deg, #fff, #d4af37)";
+    btn.style.color = "#000";
+    btn.style.transform = "scale(1.1)";
+    btn.style.boxShadow = "0 0 40px rgba(255, 255, 255, 0.8)";
+    
+    // Dispara fogos de artifício/confetes
+    launchCelebration();
+    
+    // Mensagem romântica
+    setTimeout(() => {
+        showRomanticMessage();
+    }, 2000);
+}
+
+// 5. Sistema de celebração
+function launchCelebration() {
+    const duration = 15 * 1000;
+    const end = Date.now() + duration;
+    const colors = ['#ff4d6d', '#ff8fa3', '#d4af37', '#ffffff'];
+    
+    (function frame() {
+        // Confetti da esquerda
+        confetti({
+            particleCount: 7,
+            angle: 60,
+            spread: 70,
+            origin: { x: 0 },
+            colors: colors,
+            scalar: 1.2
+        });
+        
+        // Confetti da direita
+        confetti({
+            particleCount: 7,
+            angle: 120,
+            spread: 70,
+            origin: { x: 1 },
+            colors: colors,
+            scalar: 1.2
+        });
+        
+        // Confetti do centro (ocasional)
+        if (Math.random() > 0.7) {
+            confetti({
+                particleCount: 15,
+                spread: 120,
+                origin: { y: 0.6 },
+                colors: colors,
+                scalar: 1.5
+            });
+        }
+        
+        if (Date.now() < end) {
+            requestAnimationFrame(frame);
+        }
+    }());
+}
+
+// 6. Mostrar mensagem romântica
+function showRomanticMessage() {
+    const message = document.createElement('div');
+    message.style.position = 'fixed';
+    message.style.top = '50%';
+    message.style.left = '50%';
+    message.style.transform = 'translate(-50%, -50%)';
+    message.style.background = 'rgba(5, 5, 5, 0.9)';
+    message.style.color = 'white';
+    message.style.padding = '40px';
+    message.style.borderRadius = '10px';
+    message.style.zIndex = '1000';
+    message.style.backdropFilter = 'blur(10px)';
+    message.style.border = '2px solid #ff4d6d';
+    message.style.textAlign = 'center';
+    message.style.maxWidth = '80%';
+    message.style.animation = 'fadeInUp 1s ease-out';
+    message.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.5)';
+    
+    message.innerHTML = `
+        <h2 style="margin-top: 0; color: #ff4d6d; font-size: 2.5rem; margin-bottom: 20px;">PARA SEMPRE JUNTOS!</h2>
+        <p style="font-size: 1.2rem; margin-bottom: 10px;">Esta será a melhor aventura da nossa vida.</p>
+        <p style="font-size: 1.2rem; margin-bottom: 30px;">Eu te amo mais do que todas as palavras podem expressar.</p>
+        <button onclick="this.parentElement.remove()" style="background: #ff4d6d; color: white; border: none; padding: 12px 30px; border-radius: 5px; cursor: pointer; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;">Continuar Nossa História</button>
+    `;
+    
+    document.body.appendChild(message);
+}
+
+// Navegação suave
+document.querySelectorAll('.nav-links a').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        window.scrollTo({
+            top: targetElement.offsetTop,
+            behavior: 'smooth'
+        });
+    });
+});
+
+// Inicialização quando o DOM estiver carregado
+document.addEventListener('DOMContentLoaded', function() {
+    // Configuração inicial adicional se necessário
+});
+    </script>
+</body>
+</html>
